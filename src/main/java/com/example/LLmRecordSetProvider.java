@@ -23,6 +23,17 @@ public class LLmRecordSetProvider implements ConnectorRecordSetProvider
         this.llmClient = requireNonNull(llmClient, "llmClient is null");
     }
 
+    /**
+     * This is where trino starts reading the data
+     *
+     * Current design is implementing a separate plugin for reading data
+     * @param transaction
+     * @param session
+     * @param split
+     * @param table
+     * @param columns
+     * @return
+     */
     @Override
     public RecordSet getRecordSet(
             ConnectorTransactionHandle transaction,
@@ -32,16 +43,20 @@ public class LLmRecordSetProvider implements ConnectorRecordSetProvider
             List<? extends ColumnHandle> columns)
     {
         requireNonNull(split, "split is null");
+
+        // Get split logic
+        // In this case, there is no boundary of a split, so regarding it as 1 dataset which has no splits
         LLmSplit llmSplit = (LLmSplit) split;
 
+        // prepare metadata
         String schemaName = llmSplit.getSchemaName();
         String tableName = llmSplit.getTableName();
         LLmTable llmTable = llmClient.getTable(session, schemaName, tableName);
 
+        // start reading the actual data.
         ReaderPlugin plugin = PluginFactory.create(schemaName);
         Stream<List<?>> stream = plugin.getRecordsIterator(tableName, path -> llmClient.getInputStream(session, path));
         Iterable<List<?>> rows = stream::iterator;
-
         List<LLmColumnHandle> handles = columns
                 .stream()
                 .map(c -> (LLmColumnHandle) c)
@@ -60,7 +75,6 @@ public class LLmRecordSetProvider implements ConnectorRecordSetProvider
                 })
                 .collect(toList());
 
-        //noinspection StaticPseudoFunctionalStyleMethod
         Iterable<List<?>> mappedRows = Iterables.transform(rows, row -> columnIndexes
                 .stream()
                 .map(row::get)
@@ -70,6 +84,7 @@ public class LLmRecordSetProvider implements ConnectorRecordSetProvider
                 .stream()
                 .map(LLmColumnHandle::getType)
                 .collect(toList());
+
         return new InMemoryRecordSet(mappedTypes, mappedRows);
     }
 }

@@ -19,6 +19,15 @@ public class LLmSplitManager implements ConnectorSplitManager {
         this.llmClient = requireNonNull(llmClient, "client is null");
     }
 
+    /**
+     * Here define how to split the data
+     * @param transaction
+     * @param session
+     * @param handle
+     * @param dynamicFilter
+     * @param constraint
+     * @return
+     */
     @Override
     public ConnectorSplitSource getSplits(
             ConnectorTransactionHandle transaction,
@@ -32,6 +41,7 @@ public class LLmSplitManager implements ConnectorSplitManager {
         // this can happen if table is removed during a query
         checkState(table != null, "Table %s.%s no longer exists", tableHandle.getSchemaName(), tableHandle.getTableName());
 
+        // LLmSplit does not contain the data, but it contains the logic of boundary of data.
         List<ConnectorSplit> splits = new ArrayList<>();
         splits.add(new LLmSplit(tableHandle.getMode(), tableHandle.getSchemaName(), tableHandle.getTableName()));
         Collections.shuffle(splits);
