@@ -1,5 +1,5 @@
 .DS_Store
-
+docker/plugin
 target
 .idea
 *.iml
