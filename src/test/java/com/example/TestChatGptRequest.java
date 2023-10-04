@@ -4,16 +4,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.theokanning.openai.client.OpenAiApi;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
-import okhttp3.OkHttpClient;
+import okhttp3.*;
 import org.testng.annotations.Test;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.Base64;
 
 import static com.theokanning.openai.service.OpenAiService.*;
 
@@ -46,5 +51,27 @@ public class TestChatGptRequest {
                 .echo(true)
                 .build();
         service.createCompletion(completionRequest).getChoices().forEach(System.out::println);
+    }
+
+    @Test
+    public void huggingFace() throws IOException, InterruptedException {
+        String apiUrl = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct";
+
+        // Create an OkHttpClient object
+        OkHttpClient client = new OkHttpClient();
+
+        // Create a Request object with the API endpoint URL and payload data
+        Request request = new Request.Builder()
+                .url(apiUrl)
+                .post(RequestBody.create(MediaType.parse("application/json"), "{\"inputs\":\"What is the file type of this path： E:/projects/trino-llvm/src/test/resources/example-data/numbers-2.csv. Please answer in single word. \"}"))
+                .addHeader("Authorization", "Bearer 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")
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        // Send the POST request and get the response
+        Response response = client.newCall(request).execute();
+
+        // Print the response body
+        System.out.println(response.body().string());
     }
 }
