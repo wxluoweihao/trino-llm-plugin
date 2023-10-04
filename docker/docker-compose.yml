@@ -8,7 +8,7 @@ services:
     volumes:
       - ./etc:/etc/trino
       - ./data:/home/trino/data:ro
-      - ./plugin/llvm:/lib/trino/plugin/llm:ro
+      - ./plugin/llm:/lib/trino/plugin/llm:ro
       - ./conf/core-site.xml:/etc/hadoop/conf/core-site.xml:ro
       - ./conf/hdfs-site.xml:/etc/hadoop/conf/hdfs-site.xml:ro
     networks:
