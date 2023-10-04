@@ -15,9 +15,12 @@ package com.example;/*
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
 import io.trino.testing.AbstractTestQueryFramework;
+import io.trino.testing.DistributedQueryRunner;
+import io.trino.testing.MaterializedResultWithQueryId;
 import io.trino.testing.QueryRunner;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.util.Optional;
 
 import static com.example.LLmQueryRunner.createLLmQueryRunner;
@@ -35,16 +38,39 @@ public final class TestLLmConnector
     }
 
     @Test
-    public void testSimple() {
-        assertQuery("SELECT * FROM llm.openai." + "\"E:/projects/trino-llvm/src/test/resources/example-data/numbers-2.csv\"", "VALUES ('eleven', '11'), ('twelve', '12')");
+    public void testCsvConnector() {
+        String testFile = getClass().getClassLoader().getResource("example-data" + File.separator + "numbers-2.csv").getPath();
+        assertQuery(String.format("SELECT * FROM llm.openai.\"%s\"", testFile), "VALUES ('eleven', '11'), ('twelve', '12')");
     }
 
     @Test
-    public void testSelectCsv()
+    public void testCsvTableFunc()
     {
+        String testFile = getClass().getClassLoader().getResource("example-data" + File.separator + "numbers-2.csv").getPath();
         assertQuery(
-                "SELECT * FROM TABLE(llm.system.read_file('openai', '" + "E:/projects/trino-llvm/src/test/resources/example-data/numbers-2.csv" + "'))",
+                String.format("SELECT * FROM TABLE(llm.system.read_file('openai', '%s'))", testFile),
                 "VALUES ('eleven', '11'), ('twelve', '12')");
+    }
+
+    @Test
+    public void testPdfConnector() {
+        String data = "This is a test";
+        String testFile = getClass().getClassLoader().getResource("example-data/test.pdf").getPath();
+        assertQuery(
+                String.format("SELECT * FROM llm.openai.\"%s\"", testFile),
+                String.format("VALUES ('%s')", data)
+        );
+    }
+
+    @Test
+    public void testPdfFunc()
+    {
+        String data = "This is a test";
+        String testFile = getClass().getClassLoader().getResource("example-data/test.pdf").getPath();
+        assertQuery(
+                String.format("SELECT * FROM TABLE(llm.system.read_file('openai', '%s'))", testFile),
+                String.format("VALUES ('%s')", data)
+        );
     }
 
     private static String toAbsolutePath(String resourceName)

@@ -38,28 +38,14 @@ public class LLmClient {
         requireNonNull(schema, "schema is null");
         requireNonNull(tableName, "tableName is null");
 
-        ReaderPlugin plugin = PluginFactory.create(schema);
+        ReaderPlugin plugin = PluginFactory.create(tableName);
         try {
-            List<LLmColumnHandle> columns = plugin.getFields(tableName, path -> getInputStream(session, path));
+            List<LLmColumnHandle> columns = plugin.getFields(session, tableName);
             return new LLmTable(LLmSplit.Mode.TABLE, tableName, columns);
         }
         catch (Exception e) {
             log.error(e, "Failed to get table: %s.%s", schema, tableName);
             return null;
-        }
-    }
-
-    public InputStream getInputStream(ConnectorSession session, String path)
-    {
-        try {
-            if (!path.startsWith("file:")) {
-                path = "file:" + path;
-            }
-            System.out.println("################### " + path);
-            return URI.create(path).toURL().openStream();
-        }
-        catch (IOException e) {
-            throw new UncheckedIOException(format("Failed to open stream for %s", path), e);
         }
     }
 

@@ -19,7 +19,7 @@ public final class LLmQueryRunner
     private static final String TPCH_SCHEMA = "tpch";
 
     public static DistributedQueryRunner createLLmQueryRunner(
-            Optional<TestingLLmServer> storageServer,
+            Optional<TestingLLmServer> server,
             Map<String, String> extraProperties,
             Map<String, String> connectorProperties)
             throws Exception
@@ -70,7 +70,7 @@ public final class LLmQueryRunner
 //        }
 //    }
 
-    public static final class StorageLocalQueryRunner
+    public static final class LLmDistributeQueryRunner
     {
         public static void main(String[] args)
                 throws Exception

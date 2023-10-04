@@ -54,8 +54,8 @@ public class LLmRecordSetProvider implements ConnectorRecordSetProvider
         LLmTable llmTable = llmClient.getTable(session, schemaName, tableName);
 
         // start reading the actual data.
-        ReaderPlugin plugin = PluginFactory.create(schemaName);
-        Stream<List<?>> stream = plugin.getRecordsIterator(tableName, path -> llmClient.getInputStream(session, path));
+        ReaderPlugin plugin = PluginFactory.create(tableName);
+        Stream<List<?>> stream = plugin.getRecordsIterator(session, tableName);
         Iterable<List<?>> rows = stream::iterator;
         List<LLmColumnHandle> handles = columns
                 .stream()
