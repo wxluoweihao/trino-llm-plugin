@@ -9,14 +9,14 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
-public class LLvmSplit implements ConnectorSplit {
+public class LLmSplit implements ConnectorSplit {
     private final Mode mode;
     private final String schemaName;
     private final String tableName;
     private final boolean remotelyAccessible;
 
     @JsonCreator
-    public LLvmSplit(
+    public LLmSplit(
             @JsonProperty("mode") Mode mode,
             @JsonProperty("schemaName") String schemaName,
             @JsonProperty("tableName") String tableName)

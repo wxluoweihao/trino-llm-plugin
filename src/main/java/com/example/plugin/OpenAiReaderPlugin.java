@@ -1,6 +1,6 @@
 package com.example.plugin;
 
-import com.example.LLvmColumnHandle;
+import com.example.LLmColumnHandle;
 import com.google.common.base.Splitter;
 
 import java.io.*;
@@ -11,18 +11,18 @@ import java.util.stream.Stream;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.trino.spi.type.VarcharType.VARCHAR;
 
-public class CsvReaderPlugin implements ReaderPlugin {
+public class OpenAiReaderPlugin implements ReaderPlugin {
     private static final String DELIMITER = ",";
 
     @Override
-    public List<LLvmColumnHandle> getFields(String path, Function<String, InputStream> streamProvider)
+    public List<LLmColumnHandle> getFields(String path, Function<String, InputStream> streamProvider)
     {
         Splitter splitter = Splitter.on(DELIMITER).trimResults();
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(streamProvider.apply(path)))) {
             List<String> fields = splitter.splitToList(reader.readLine());
             return fields.stream()
-                    .map(field -> new LLvmColumnHandle(field, VARCHAR))
+                    .map(field -> new LLmColumnHandle(field, VARCHAR))
                     .collect(toImmutableList());
         }
         catch (IOException e) {

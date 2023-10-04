@@ -13,8 +13,8 @@
  */
 package com.example.ptf;
 
-import com.example.LLvmColumnHandle;
-import com.example.LLvmTableHandle;
+import com.example.LLmColumnHandle;
+import com.example.LLmTableHandle;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableList;
@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.example.LLvmSplit.Mode.LIST;
+import static com.example.LLmSplit.Mode.LIST;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.trino.spi.function.table.ReturnTypeSpecification.GenericTable.GENERIC_TABLE;
 import static io.trino.spi.type.BigintType.BIGINT;
@@ -50,7 +50,7 @@ public class ListTableFunction
             .map(column -> new ColumnMetadata(column.getKey(), column.getValue()))
             .collect(toImmutableList());
     public static final List<ColumnHandle> COLUMN_HANDLES = COLUMN_TYPES.entrySet().stream()
-            .map(column -> new LLvmColumnHandle(column.getKey(), column.getValue()))
+            .map(column -> new LLmColumnHandle(column.getKey(), column.getValue()))
             .collect(toImmutableList());
 
     @Override
@@ -84,7 +84,7 @@ public class ListTableFunction
                     .map(column -> new Descriptor.Field(column.getKey(), Optional.of(column.getValue())))
                     .collect(toImmutableList()));
 
-            QueryFunctionHandle handle = new QueryFunctionHandle(new LLvmTableHandle(LIST, LIST_SCHEMA_NAME, path));
+            QueryFunctionHandle handle = new QueryFunctionHandle(new LLmTableHandle(LIST, LIST_SCHEMA_NAME, path));
 
             return TableFunctionAnalysis.builder()
                     .returnedType(returnedType)
@@ -96,10 +96,10 @@ public class ListTableFunction
     public static class QueryFunctionHandle
             implements ConnectorTableFunctionHandle
     {
-        private final LLvmTableHandle tableHandle;
+        private final LLmTableHandle tableHandle;
 
         @JsonCreator
-        public QueryFunctionHandle(@JsonProperty("tableHandle") LLvmTableHandle tableHandle)
+        public QueryFunctionHandle(@JsonProperty("tableHandle") LLmTableHandle tableHandle)
         {
             this.tableHandle = requireNonNull(tableHandle, "tableHandle is null");
         }

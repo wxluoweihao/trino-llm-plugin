@@ -11,12 +11,12 @@ import java.util.Objects;
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static java.util.Objects.requireNonNull;
 
-public class LLvmColumnHandle implements ColumnHandle {
+public class LLmColumnHandle implements ColumnHandle {
     private final String name;
     private final Type type;
 
     @JsonCreator
-    public LLvmColumnHandle(
+    public LLmColumnHandle(
             @JsonProperty("name") String name,
             @JsonProperty("type") Type type)
     {
@@ -57,7 +57,7 @@ public class LLvmColumnHandle implements ColumnHandle {
             return false;
         }
 
-        LLvmColumnHandle other = (LLvmColumnHandle) obj;
+        LLmColumnHandle other = (LLmColumnHandle) obj;
         return Objects.equals(this.name, other.name);
     }
 

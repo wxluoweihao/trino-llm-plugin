@@ -11,14 +11,14 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-public class LLvmTableHandle implements ConnectorTableHandle {
-    private final LLvmSplit.Mode mode;
+public class LLmTableHandle implements ConnectorTableHandle {
+    private final LLmSplit.Mode mode;
     private final String schemaName;
     private final String tableName;
 
     @JsonCreator
-    public LLvmTableHandle(
-            @JsonProperty("mode") LLvmSplit.Mode mode,
+    public LLmTableHandle(
+            @JsonProperty("mode") LLmSplit.Mode mode,
             @JsonProperty("schemaName") String schemaName,
             @JsonProperty("tableName") String tableName)
     {
@@ -28,7 +28,7 @@ public class LLvmTableHandle implements ConnectorTableHandle {
     }
 
     @JsonProperty
-    public LLvmSplit.Mode getMode()
+    public LLmSplit.Mode getMode()
     {
         return mode;
     }
@@ -67,7 +67,7 @@ public class LLvmTableHandle implements ConnectorTableHandle {
             return false;
         }
 
-        LLvmTableHandle other = (LLvmTableHandle) obj;
+        LLmTableHandle other = (LLmTableHandle) obj;
         return Objects.equals(this.mode, other.mode) &&
                 Objects.equals(this.schemaName, other.schemaName) &&
                 Objects.equals(this.tableName, other.tableName);

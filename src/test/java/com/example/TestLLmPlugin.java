@@ -12,8 +12,6 @@ package com.example;/*
  * limitations under the License.
  */
 
-import com.example.LLvmPlugin;
-import com.example.modules.LLvmModule;
 import io.trino.spi.connector.ConnectorFactory;
 import io.trino.testing.TestingConnectorContext;
 import org.testng.annotations.Test;
@@ -22,7 +20,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
 
-public class TestLLvmPlugin
+public class TestLLmPlugin
 {
     @Test
     public void testCreateConnector()
@@ -41,6 +39,6 @@ public class TestLLvmPlugin
 
     private static ConnectorFactory getConnectorFactory()
     {
-        return getOnlyElement(new LLvmPlugin().getConnectorFactories());
+        return getOnlyElement(new LLmPlugin().getConnectorFactories());
     }
 }

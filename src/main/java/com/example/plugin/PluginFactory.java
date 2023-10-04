@@ -11,8 +11,8 @@ public final class PluginFactory
     public static ReaderPlugin create(String typeName)
     {
         switch (typeName.toLowerCase(ENGLISH)) {
-            case "chatgpt4":
-                return new CsvReaderPlugin();
+            case "openai":
+                return new OpenAiReaderPlugin();
             default:
                 throw new SchemaNotFoundException(typeName);
         }

@@ -10,24 +10,24 @@ import io.trino.spi.transaction.IsolationLevel;
 
 import java.util.Set;
 
-import static com.example.LLvmTransactionHandle.INSTANCE;
+import static com.example.LLmTransactionHandle.INSTANCE;
 import static java.util.Objects.requireNonNull;
 
-public class LLvmConnector implements Connector {
-    private static final Logger log = Logger.get(LLvmConnector.class);
+public class LLmConnector implements Connector {
+    private static final Logger log = Logger.get(LLmConnector.class);
 
     private final LifeCycleManager lifeCycleManager;
-    private final LLvmMetadata llvmMetadata;
-    private final LLvmSplitManager llvmSplitManager;
-    private final LLvmRecordSetProvider llvmRecordSetProvider;
+    private final LLmMetadata llmMetadata;
+    private final LLmSplitManager llmSplitManager;
+    private final LLmRecordSetProvider llmRecordSetProvider;
     private final Set<ConnectorTableFunction> connectorTableFunctions;
 
     @Inject
-    public LLvmConnector(LifeCycleManager lifeCycleManager, LLvmMetadata llvmMetadata, LLvmSplitManager llvmSplitManager, LLvmRecordSetProvider llvmRecordSetProvider, Set<ConnectorTableFunction> connectorTableFunctions) {
+    public LLmConnector(LifeCycleManager lifeCycleManager, LLmMetadata llmMetadata, LLmSplitManager llmSplitManager, LLmRecordSetProvider llmRecordSetProvider, Set<ConnectorTableFunction> connectorTableFunctions) {
         this.lifeCycleManager = requireNonNull(lifeCycleManager, "lifeCycleManager is null");
-        this.llvmMetadata = requireNonNull(llvmMetadata, "LLvmMetadata is null");
-        this.llvmSplitManager = requireNonNull(llvmSplitManager, "llvmSplitManager is null");
-        this.llvmRecordSetProvider = requireNonNull(llvmRecordSetProvider, "llvmRecordSetProvider is null");
+        this.llmMetadata = requireNonNull(llmMetadata, "LLmMetadata is null");
+        this.llmSplitManager = requireNonNull(llmSplitManager, "llmSplitManager is null");
+        this.llmRecordSetProvider = requireNonNull(llmRecordSetProvider, "llmRecordSetProvider is null");
         this.connectorTableFunctions = ImmutableSet.copyOf(requireNonNull(connectorTableFunctions, "connectorTableFunctions is null"));
     }
 
@@ -40,19 +40,19 @@ public class LLvmConnector implements Connector {
     @Override
     public ConnectorMetadata getMetadata(ConnectorTransactionHandle transactionHandle)
     {
-        return this.llvmMetadata;
+        return this.llmMetadata;
     }
 
     @Override
     public ConnectorSplitManager getSplitManager()
     {
-        return this.llvmSplitManager;
+        return this.llmSplitManager;
     }
 
     @Override
     public ConnectorRecordSetProvider getRecordSetProvider()
     {
-        return this.llvmRecordSetProvider;
+        return this.llmRecordSetProvider;
     }
 
     @Override

@@ -2,13 +2,9 @@ package com.example;
 
 import com.example.plugin.PluginFactory;
 import com.example.plugin.ReaderPlugin;
-import io.airlift.http.client.HttpStatus;
-import io.airlift.http.client.Request;
 import io.airlift.log.Logger;
 import io.trino.spi.connector.ConnectorSession;
-import io.trino.spi.type.VarcharType;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -19,13 +15,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.airlift.http.client.Request.Builder.prepareGet;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
-public class LLvmClient {
+public class LLmClient {
 
-    private static final Logger log = Logger.get(LLvmClient.class);
+    private static final Logger log = Logger.get(LLmClient.class);
 
     /**
      * List all supported llvm models in trino
@@ -33,20 +28,20 @@ public class LLvmClient {
      */
     public List<String> getSchemaNames()
     {
-        return Stream.of(LLvmTypes.values())
-                .map(LLvmTypes::toString)
+        return Stream.of(LLmTypes.values())
+                .map(LLmTypes::toString)
                 .collect(Collectors.toList());
     }
 
-    public LLvmTable getTable(ConnectorSession session, String schema, String tableName)
+    public LLmTable getTable(ConnectorSession session, String schema, String tableName)
     {
         requireNonNull(schema, "schema is null");
         requireNonNull(tableName, "tableName is null");
 
         ReaderPlugin plugin = PluginFactory.create(schema);
         try {
-            List<LLvmColumnHandle> columns = plugin.getFields(tableName, path -> getInputStream(session, path));
-            return new LLvmTable(LLvmSplit.Mode.TABLE, tableName, columns);
+            List<LLmColumnHandle> columns = plugin.getFields(tableName, path -> getInputStream(session, path));
+            return new LLmTable(LLmSplit.Mode.TABLE, tableName, columns);
         }
         catch (Exception e) {
             log.error(e, "Failed to get table: %s.%s", schema, tableName);

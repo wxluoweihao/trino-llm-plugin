@@ -10,13 +10,13 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
-public class LLvmSplitManager implements ConnectorSplitManager {
-    private final LLvmClient llvmClient;
+public class LLmSplitManager implements ConnectorSplitManager {
+    private final LLmClient llmClient;
 
     @Inject
-    public LLvmSplitManager(LLvmClient llvmClient)
+    public LLmSplitManager(LLmClient llmClient)
     {
-        this.llvmClient = requireNonNull(llvmClient, "client is null");
+        this.llmClient = requireNonNull(llmClient, "client is null");
     }
 
     @Override
@@ -27,13 +27,13 @@ public class LLvmSplitManager implements ConnectorSplitManager {
             DynamicFilter dynamicFilter,
             Constraint constraint)
     {
-        LLvmTableHandle tableHandle = (LLvmTableHandle) handle;
-        LLvmTable table = llvmClient.getTable(session, tableHandle.getSchemaName(), tableHandle.getTableName());
+        LLmTableHandle tableHandle = (LLmTableHandle) handle;
+        LLmTable table = llmClient.getTable(session, tableHandle.getSchemaName(), tableHandle.getTableName());
         // this can happen if table is removed during a query
         checkState(table != null, "Table %s.%s no longer exists", tableHandle.getSchemaName(), tableHandle.getTableName());
 
         List<ConnectorSplit> splits = new ArrayList<>();
-        splits.add(new LLvmSplit(tableHandle.getMode(), tableHandle.getSchemaName(), tableHandle.getTableName()));
+        splits.add(new LLmSplit(tableHandle.getMode(), tableHandle.getSchemaName(), tableHandle.getTableName()));
         Collections.shuffle(splits);
 
         return new FixedSplitSource(splits);

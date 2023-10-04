@@ -13,10 +13,10 @@
  */
 package com.example.ptf;
 
-import com.example.LLvmClient;
-import com.example.LLvmColumnHandle;
-import com.example.LLvmTable;
-import com.example.LLvmTableHandle;
+import com.example.LLmClient;
+import com.example.LLmColumnHandle;
+import com.example.LLmTable;
+import com.example.LLmTableHandle;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableList;
@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.example.LLvmSplit.Mode.TABLE;
+import static com.example.LLmSplit.Mode.TABLE;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.trino.spi.function.table.ReturnTypeSpecification.GenericTable.GENERIC_TABLE;
 import static io.trino.spi.type.VarcharType.VARCHAR;
@@ -42,26 +42,26 @@ import static java.util.Objects.requireNonNull;
 public class ReadFileTableFunction
         implements Provider<ConnectorTableFunction>
 {
-    private final LLvmClient llvmClient;
+    private final LLmClient llmClient;
 
     @Inject
-    public ReadFileTableFunction(LLvmClient llvmClient)
+    public ReadFileTableFunction(LLmClient llmClient)
     {
-        this.llvmClient = requireNonNull(llvmClient, "llvmClient is null");
+        this.llmClient = requireNonNull(llmClient, "llmClient is null");
     }
 
     @Override
     public ConnectorTableFunction get()
     {
-        return new QueryFunction(llvmClient);
+        return new QueryFunction(llmClient);
     }
 
     public static class QueryFunction
             extends AbstractConnectorTableFunction
     {
-        private final LLvmClient llvmClient;
+        private final LLmClient llmClient;
 
-        public QueryFunction(LLvmClient llvmClient)
+        public QueryFunction(LLmClient llmClient)
         {
             super(
                     "system",
@@ -76,7 +76,7 @@ public class ReadFileTableFunction
                                     .type(VARCHAR)
                                     .build()),
                     GENERIC_TABLE);
-            this.llvmClient = requireNonNull(llvmClient, "llvmClient is null");
+            this.llmClient = requireNonNull(llmClient, "llmClient is null");
         }
 
         @Override
@@ -85,13 +85,13 @@ public class ReadFileTableFunction
             String type = ((Slice) ((ScalarArgument) arguments.get("TYPE")).getValue()).toStringUtf8();
             String path = ((Slice) ((ScalarArgument) arguments.get("PATH")).getValue()).toStringUtf8();
 
-            LLvmTable table = llvmClient.getTable(session, type, path);
+            LLmTable table = llmClient.getTable(session, type, path);
 
             Descriptor returnedType = new Descriptor(table.getColumns().stream()
                     .map(column -> new Descriptor.Field(column.getName(), Optional.of(column.getType())))
                     .collect(toImmutableList()));
 
-            ReadFunctionHandle handle = new ReadFunctionHandle(new LLvmTableHandle(TABLE, type, path), table.getColumns());
+            ReadFunctionHandle handle = new ReadFunctionHandle(new LLmTableHandle(TABLE, type, path), table.getColumns());
 
             return TableFunctionAnalysis.builder()
                     .returnedType(returnedType)
@@ -103,13 +103,13 @@ public class ReadFileTableFunction
     public static class ReadFunctionHandle
             implements ConnectorTableFunctionHandle
     {
-        private final LLvmTableHandle tableHandle;
-        private final List<LLvmColumnHandle> columns;
+        private final LLmTableHandle tableHandle;
+        private final List<LLmColumnHandle> columns;
 
         @JsonCreator
         public ReadFunctionHandle(
-                @JsonProperty("tableHandle") LLvmTableHandle tableHandle,
-                @JsonProperty("columns") List<LLvmColumnHandle> columns)
+                @JsonProperty("tableHandle") LLmTableHandle tableHandle,
+                @JsonProperty("columns") List<LLmColumnHandle> columns)
         {
             this.tableHandle = requireNonNull(tableHandle, "tableHandle is null");
             this.columns = ImmutableList.copyOf(requireNonNull(columns, "columns is null"));
@@ -122,7 +122,7 @@ public class ReadFileTableFunction
         }
 
         @JsonProperty
-        public List<LLvmColumnHandle> getColumns()
+        public List<LLmColumnHandle> getColumns()
         {
             return columns;
         }

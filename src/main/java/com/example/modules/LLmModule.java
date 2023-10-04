@@ -16,26 +16,26 @@ import static io.airlift.configuration.ConfigBinder.configBinder;
 import static io.airlift.http.client.HttpClientBinder.httpClientBinder;
 import static java.util.Objects.requireNonNull;
 
-public class LLvmModule implements Module {
+public class LLmModule implements Module {
 
     private final TypeManager typeManager;
 
-    public LLvmModule(TypeManager typeManager) {
+    public LLmModule(TypeManager typeManager) {
         this.typeManager = requireNonNull(typeManager, "typeManager is null");
     }
 
     @Override
     public void configure(Binder binder) {
         binder.bind(TypeManager.class).toInstance(typeManager);
-        binder.bind(LLvmConnector.class).in(Scopes.SINGLETON);
-        binder.bind(LLvmMetadata.class).in(Scopes.SINGLETON);
-        binder.bind(LLvmClient.class).in(Scopes.SINGLETON);
-        binder.bind(LLvmSplitManager.class).in(Scopes.SINGLETON);
-        binder.bind(LLvmRecordSetProvider.class).in(Scopes.SINGLETON);
+        binder.bind(LLmConnector.class).in(Scopes.SINGLETON);
+        binder.bind(LLmMetadata.class).in(Scopes.SINGLETON);
+        binder.bind(LLmClient.class).in(Scopes.SINGLETON);
+        binder.bind(LLmSplitManager.class).in(Scopes.SINGLETON);
+        binder.bind(LLmRecordSetProvider.class).in(Scopes.SINGLETON);
         newSetBinder(binder, ConnectorTableFunction.class).addBinding().toProvider(ReadFileTableFunction.class).in(Scopes.SINGLETON);
         newSetBinder(binder, ConnectorTableFunction.class).addBinding().toProvider(ListTableFunction.class).in(Scopes.SINGLETON);
         binder.bind(OpenTelemetry.class).toInstance(OpenTelemetry.noop());
-        configBinder(binder).bindConfig(HttpClientConfig.class, ForLLvm.class);
-        httpClientBinder(binder).bindHttpClient("llvm", ForLLvm.class);
+        configBinder(binder).bindConfig(HttpClientConfig.class, ForLLm.class);
+        httpClientBinder(binder).bindHttpClient("llm", ForLLm.class);
     }
 }

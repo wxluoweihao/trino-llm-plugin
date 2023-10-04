@@ -5,10 +5,10 @@ import io.trino.spi.connector.ConnectorFactory;
 
 import java.util.List;
 
-public class LLvmPlugin implements Plugin {
+public class LLmPlugin implements Plugin {
     @Override
     public Iterable<ConnectorFactory> getConnectorFactories()
     {
-        return List.of(new LLvmConnectorFactory());
+        return List.of(new LLmConnectorFactory());
     }
 }

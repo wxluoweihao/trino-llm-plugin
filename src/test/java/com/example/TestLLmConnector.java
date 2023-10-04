@@ -20,30 +20,30 @@ import org.testng.annotations.Test;
 
 import java.util.Optional;
 
-import static com.example.LLvmQueryRunner.createLLvmQueryRunner;
-public final class TestLLvmConnector
+import static com.example.LLmQueryRunner.createLLmQueryRunner;
+public final class TestLLmConnector
         extends AbstractTestQueryFramework
 {
-    private TestingLLvmServer server;
+    private TestingLLmServer server;
 
     @Override
     protected QueryRunner createQueryRunner()
             throws Exception
     {
-        server = closeAfterClass(new TestingLLvmServer());
-        return createLLvmQueryRunner(Optional.of(server),ImmutableMap.of(), ImmutableMap.of());
+        server = closeAfterClass(new TestingLLmServer());
+        return createLLmQueryRunner(Optional.of(server),ImmutableMap.of(), ImmutableMap.of());
     }
 
     @Test
     public void testSimple() {
-        assertQuery("SELECT * FROM llvm.chatgpt4." + "\"E:/projects/trino-llvm/src/test/resources/example-data/numbers-2.csv\"", "VALUES ('eleven', '11'), ('twelve', '12')");
+        assertQuery("SELECT * FROM llm.openai." + "\"E:/projects/trino-llvm/src/test/resources/example-data/numbers-2.csv\"", "VALUES ('eleven', '11'), ('twelve', '12')");
     }
 
     @Test
     public void testSelectCsv()
     {
         assertQuery(
-                "SELECT * FROM TABLE(llvm.system.read_file('csv', '" + "E:/projects/trino-llvm/src/test/resources/example-data/numbers-2.csv" + "'))",
+                "SELECT * FROM TABLE(llm.system.read_file('openai', '" + "E:/projects/trino-llvm/src/test/resources/example-data/numbers-2.csv" + "'))",
                 "VALUES ('eleven', '11'), ('twelve', '12')");
     }
 

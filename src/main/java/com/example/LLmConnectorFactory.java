@@ -1,6 +1,6 @@
 package com.example;
 
-import com.example.modules.LLvmModule;
+import com.example.modules.LLmModule;
 import com.google.inject.Injector;
 import io.airlift.bootstrap.Bootstrap;
 import io.trino.spi.connector.Connector;
@@ -12,10 +12,10 @@ import java.util.Map;
 import static com.google.common.base.Throwables.throwIfUnchecked;
 import static java.util.Objects.requireNonNull;
 
-public class LLvmConnectorFactory implements ConnectorFactory  {
+public class LLmConnectorFactory implements ConnectorFactory  {
     @Override
     public String getName() {
-        return "llvm";
+        return "llm";
     }
 
     @Override
@@ -24,7 +24,7 @@ public class LLvmConnectorFactory implements ConnectorFactory  {
         try {
             // A plugin is not required to use Guice; it is just very convenient
             Bootstrap app = new Bootstrap(
-                    new LLvmModule(context.getTypeManager())
+                    new LLmModule(context.getTypeManager())
             );
 
             Injector injector = app
@@ -32,7 +32,7 @@ public class LLvmConnectorFactory implements ConnectorFactory  {
                     .setRequiredConfigurationProperties(config)
                     .initialize();
 
-            return injector.getInstance(LLvmConnector.class);
+            return injector.getInstance(LLmConnector.class);
         }
         catch (Exception e) {
             throwIfUnchecked(e);

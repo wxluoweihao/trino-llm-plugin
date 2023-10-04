@@ -13,14 +13,14 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
-public class LLvmRecordSetProvider implements ConnectorRecordSetProvider
+public class LLmRecordSetProvider implements ConnectorRecordSetProvider
 {
-    private final LLvmClient llvmClient;
+    private final LLmClient llmClient;
 
     @Inject
-    public LLvmRecordSetProvider(LLvmClient llvmClient)
+    public LLmRecordSetProvider(LLmClient llmClient)
     {
-        this.llvmClient = requireNonNull(llvmClient, "llvmClient is null");
+        this.llmClient = requireNonNull(llmClient, "llmClient is null");
     }
 
     @Override
@@ -32,25 +32,25 @@ public class LLvmRecordSetProvider implements ConnectorRecordSetProvider
             List<? extends ColumnHandle> columns)
     {
         requireNonNull(split, "split is null");
-        LLvmSplit llvmSplit = (LLvmSplit) split;
+        LLmSplit llmSplit = (LLmSplit) split;
 
-        String schemaName = llvmSplit.getSchemaName();
-        String tableName = llvmSplit.getTableName();
-        LLvmTable llvmTable = llvmClient.getTable(session, schemaName, tableName);
+        String schemaName = llmSplit.getSchemaName();
+        String tableName = llmSplit.getTableName();
+        LLmTable llmTable = llmClient.getTable(session, schemaName, tableName);
 
         ReaderPlugin plugin = PluginFactory.create(schemaName);
-        Stream<List<?>> stream = plugin.getRecordsIterator(tableName, path -> llvmClient.getInputStream(session, path));
+        Stream<List<?>> stream = plugin.getRecordsIterator(tableName, path -> llmClient.getInputStream(session, path));
         Iterable<List<?>> rows = stream::iterator;
 
-        List<LLvmColumnHandle> handles = columns
+        List<LLmColumnHandle> handles = columns
                 .stream()
-                .map(c -> (LLvmColumnHandle) c)
+                .map(c -> (LLmColumnHandle) c)
                 .collect(toList());
         List<Integer> columnIndexes = handles
                 .stream()
                 .map(column -> {
                     int index = 0;
-                    for (ColumnMetadata columnMetadata : llvmTable.getColumnsMetadata()) {
+                    for (ColumnMetadata columnMetadata : llmTable.getColumnsMetadata()) {
                         if (columnMetadata.getName().equalsIgnoreCase(column.getName())) {
                             return index;
                         }
@@ -68,7 +68,7 @@ public class LLvmRecordSetProvider implements ConnectorRecordSetProvider
 
         List<Type> mappedTypes = handles
                 .stream()
-                .map(LLvmColumnHandle::getType)
+                .map(LLmColumnHandle::getType)
                 .collect(toList());
         return new InMemoryRecordSet(mappedTypes, mappedRows);
     }

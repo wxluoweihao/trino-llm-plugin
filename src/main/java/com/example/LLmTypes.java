@@ -2,8 +2,8 @@ package com.example;
 
 import static java.util.Locale.ENGLISH;
 
-public enum LLvmTypes {
-    chatgpt4;
+public enum LLmTypes {
+    openai;
 
     @Override
     public String toString()

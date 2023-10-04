@@ -26,6 +26,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD, PARAMETER, METHOD})
 @Qualifier
 @BindingAnnotation
-public @interface ForLLvm
+public @interface ForLLm
 {
 }

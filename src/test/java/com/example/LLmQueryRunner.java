@@ -5,23 +5,21 @@ import io.airlift.log.Logging;
 import io.trino.Session;
 import io.trino.plugin.tpch.TpchPlugin;
 import io.trino.testing.DistributedQueryRunner;
-import io.trino.testing.LocalQueryRunner;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import static io.airlift.testing.Closeables.closeAllSuppress;
 import static io.trino.testing.TestingSession.testSessionBuilder;
 
-public final class LLvmQueryRunner
+public final class LLmQueryRunner
 {
-    private LLvmQueryRunner() {}
+    private LLmQueryRunner() {}
 
     private static final String TPCH_SCHEMA = "tpch";
 
-    public static DistributedQueryRunner createLLvmQueryRunner(
-            Optional<TestingLLvmServer> storageServer,
+    public static DistributedQueryRunner createLLmQueryRunner(
+            Optional<TestingLLmServer> storageServer,
             Map<String, String> extraProperties,
             Map<String, String> connectorProperties)
             throws Exception
@@ -30,16 +28,8 @@ public final class LLvmQueryRunner
                 .setExtraProperties(extraProperties)
                 .build();
         try {
-            queryRunner.installPlugin(new TpchPlugin());
-            queryRunner.createCatalog("tpch", "tpch");
-
-            queryRunner.installPlugin(new LLvmPlugin());
-            queryRunner.createCatalog("llvm", "llvm", connectorProperties);
-
-//            storageServer.ifPresent(server -> {
-//                server.getHadoopServer().copyFromLocal("example-data/lineitem-1.csv", "/tmp/lineitem-1.csv", "/tmp/lineitem-1");
-//                server.getHadoopServer().copyFromLocal("example-data/numbers.tsv", "/tmp/numbers.tsv", "/tmp/numbers.tsv");
-//            });
+            queryRunner.installPlugin(new LLmPlugin());
+            queryRunner.createCatalog("llm", "llm", connectorProperties);
 
             return queryRunner;
         }
@@ -52,7 +42,7 @@ public final class LLvmQueryRunner
     private static Session createSession()
     {
         return testSessionBuilder()
-                .setCatalog("llvm")
+                .setCatalog("ll`m")
                 .setSchema(TPCH_SCHEMA)
                 .build();
     }
@@ -87,9 +77,9 @@ public final class LLvmQueryRunner
         {
             Logging.initialize();
 
-            DistributedQueryRunner queryRunner = createLLvmQueryRunner(Optional.empty(), Map.of("http-server.http.port", "8080"), Map.of());
+            DistributedQueryRunner queryRunner = createLLmQueryRunner(Optional.empty(), Map.of("http-server.http.port", "8080"), Map.of());
 
-            Logger log = Logger.get(LLvmQueryRunner.class);
+            Logger log = Logger.get(LLmQueryRunner.class);
             log.info("======== SERVER STARTED ========");
             log.info("\n====\n%s\n====", queryRunner.getCoordinator().getBaseUrl());
         }

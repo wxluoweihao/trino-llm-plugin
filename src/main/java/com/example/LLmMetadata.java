@@ -17,13 +17,13 @@ import static com.example.ptf.ListTableFunction.LIST_SCHEMA_NAME;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static java.util.Objects.requireNonNull;
 
-public class LLvmMetadata implements ConnectorMetadata {
+public class LLmMetadata implements ConnectorMetadata {
 
-    private final LLvmClient llvmClient;
+    private final LLmClient llmClient;
 
     @Inject
-    public LLvmMetadata(LLvmClient llvmClient) {
-        this.llvmClient = llvmClient;
+    public LLmMetadata(LLmClient llmClient) {
+        this.llmClient = llmClient;
     }
 
     @Override
@@ -34,31 +34,31 @@ public class LLvmMetadata implements ConnectorMetadata {
 
     public List<String> listSchemaNames()
     {
-        return List.copyOf(llvmClient.getSchemaNames());
+        return List.copyOf(llmClient.getSchemaNames());
     }
 
     @Override
-    public LLvmTableHandle getTableHandle(ConnectorSession session, SchemaTableName tableName)
+    public LLmTableHandle getTableHandle(ConnectorSession session, SchemaTableName tableName)
     {
         if (!listSchemaNames(session).contains(tableName.getSchemaName())) {
             return null;
         }
 
-        LLvmTable table = llvmClient.getTable(session, tableName.getSchemaName(), tableName.getTableName());
+        LLmTable table = llmClient.getTable(session, tableName.getSchemaName(), tableName.getTableName());
         if (table == null) {
             return null;
         }
 
-        return new LLvmTableHandle(table.getMode(), tableName.getSchemaName(), tableName.getTableName());
+        return new LLmTableHandle(table.getMode(), tableName.getSchemaName(), tableName.getTableName());
     }
 
     @Override
     public ConnectorTableMetadata getTableMetadata(ConnectorSession session, ConnectorTableHandle table)
     {
-        LLvmTableHandle llvmTableHandle = (LLvmTableHandle) table;
-        SchemaTableName tableName = new SchemaTableName(llvmTableHandle.getSchemaName(), llvmTableHandle.getTableName());
+        LLmTableHandle llmTableHandle = (LLmTableHandle) table;
+        SchemaTableName tableName = new SchemaTableName(llmTableHandle.getSchemaName(), llmTableHandle.getTableName());
 
-        return getLLvmTableMetadata(session, tableName);
+        return getLLmTableMetadata(session, tableName);
     }
 
     @Override
@@ -69,12 +69,12 @@ public class LLvmMetadata implements ConnectorMetadata {
             schemaNames = List.of(schemaNameOrNull.get());
         }
         else {
-            schemaNames = llvmClient.getSchemaNames();
+            schemaNames = llmClient.getSchemaNames();
         }
 
         ImmutableList.Builder<SchemaTableName> builder = ImmutableList.builder();
         for (String schemaName : schemaNames) {
-            for (String tableName : llvmClient.getTableNames(schemaName)) {
+            for (String tableName : llmClient.getTableNames(schemaName)) {
                 builder.add(new SchemaTableName(schemaName, tableName));
             }
         }
@@ -84,16 +84,16 @@ public class LLvmMetadata implements ConnectorMetadata {
     @Override
     public Map<String, ColumnHandle> getColumnHandles(ConnectorSession session, ConnectorTableHandle tableHandle)
     {
-        LLvmTableHandle llvmTableHandle = (LLvmTableHandle) tableHandle;
+        LLmTableHandle llmTableHandle = (LLmTableHandle) tableHandle;
 
-        LLvmTable table = llvmClient.getTable(session, llvmTableHandle.getSchemaName(), llvmTableHandle.getTableName());
+        LLmTable table = llmClient.getTable(session, llmTableHandle.getSchemaName(), llmTableHandle.getTableName());
         if (table == null) {
-            throw new TableNotFoundException(llvmTableHandle.toSchemaTableName());
+            throw new TableNotFoundException(llmTableHandle.toSchemaTableName());
         }
 
         ImmutableMap.Builder<String, ColumnHandle> columnHandles = ImmutableMap.builder();
         for (ColumnMetadata column : table.getColumnsMetadata()) {
-            columnHandles.put(column.getName(), new LLvmColumnHandle(column.getName(), column.getType()));
+            columnHandles.put(column.getName(), new LLmColumnHandle(column.getName(), column.getType()));
         }
         return columnHandles.build();
     }
@@ -104,7 +104,7 @@ public class LLvmMetadata implements ConnectorMetadata {
         requireNonNull(prefix, "prefix is null");
         ImmutableMap.Builder<SchemaTableName, List<ColumnMetadata>> columns = ImmutableMap.builder();
         for (SchemaTableName tableName : listTables(session, prefix)) {
-            ConnectorTableMetadata tableMetadata = getLLvmTableMetadata(session, tableName);
+            ConnectorTableMetadata tableMetadata = getLLmTableMetadata(session, tableName);
             // table can disappear during listing operation
             if (tableMetadata != null) {
                 columns.put(tableName, tableMetadata.getColumns());
@@ -120,12 +120,12 @@ public class LLvmMetadata implements ConnectorMetadata {
         return listTables(session, prefix).stream()
                 .map(table -> TableColumnsMetadata.forTable(
                         table,
-                        requireNonNull(getLLvmTableMetadata(session, table), "tableMetadata is null")
+                        requireNonNull(getLLmTableMetadata(session, table), "tableMetadata is null")
                                 .getColumns()))
                 .iterator();
     }
 
-    private ConnectorTableMetadata getLLvmTableMetadata(ConnectorSession session, SchemaTableName tableName)
+    private ConnectorTableMetadata getLLmTableMetadata(ConnectorSession session, SchemaTableName tableName)
     {
         if (tableName.getSchemaName().equals(LIST_SCHEMA_NAME)) {
             return new ConnectorTableMetadata(tableName, COLUMNS_METADATA);
@@ -136,9 +136,8 @@ public class LLvmMetadata implements ConnectorMetadata {
 //            return null;
 //        }
 
-        LLvmTable table = llvmClient.getTable(session, tableName.getSchemaName(), tableName.getTableName());
+        LLmTable table = llmClient.getTable(session, tableName.getSchemaName(), tableName.getTableName());
         if (table == null) {
-            System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 2");
             return null;
         }
 
@@ -156,7 +155,7 @@ public class LLvmMetadata implements ConnectorMetadata {
     @Override
     public ColumnMetadata getColumnMetadata(ConnectorSession session, ConnectorTableHandle tableHandle, ColumnHandle columnHandle)
     {
-        return ((LLvmColumnHandle) columnHandle).getColumnMetadata();
+        return ((LLmColumnHandle) columnHandle).getColumnMetadata();
     }
 
     @Override
@@ -167,7 +166,7 @@ public class LLvmMetadata implements ConnectorMetadata {
             return Optional.of(new TableFunctionApplicationResult<>(
                     catFunctionHandle.getTableHandle(),
                     catFunctionHandle.getColumns().stream()
-                            .map(column -> new LLvmColumnHandle(column.getName(), column.getType()))
+                            .map(column -> new LLmColumnHandle(column.getName(), column.getType()))
                             .collect(toImmutableList())));
         }
         return Optional.empty();

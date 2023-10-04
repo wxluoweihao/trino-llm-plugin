@@ -8,7 +8,7 @@ services:
     volumes:
       - ./etc:/etc/trino
       - /E/docker/trino-getting-started-main/hive/trino-hdfs3/data:/home/trino/data:ro
-      - /E/docker/trino-getting-started-main/hive/trino-hdfs3/plugin/llvm:/lib/trino/plugin/llvm:ro
+      - /E/docker/trino-getting-started-main/hive/trino-hdfs3/plugin/llvm:/lib/trino/plugin/llm:ro
       - /E/dockerVolume/hdfs:/home/dev/hdfs:ro
       - /E/docker/code:/home/dev/code:ro
       - /C/Users/luogo/Desktop/projects/ParserUtil:/home/dev/trino-gateway:ro

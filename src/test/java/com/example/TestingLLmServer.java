@@ -14,18 +14,15 @@ package com.example;/*
 
 import io.trino.testing.ResourcePresence;
 import io.trino.util.AutoCloseableCloser;
-import org.testcontainers.containers.Network;
 
-import static org.testcontainers.containers.Network.newNetwork;
-
-public class TestingLLvmServer
+public class TestingLLmServer
         implements AutoCloseable
 {
     private final AutoCloseableCloser closer = AutoCloseableCloser.create();
 
     private boolean isRunning;
 
-    public TestingLLvmServer()
+    public TestingLLmServer()
     {
         isRunning = true;
     }

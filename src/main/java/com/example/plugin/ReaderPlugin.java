@@ -1,6 +1,6 @@
 package com.example.plugin;
 
-import com.example.LLvmColumnHandle;
+import com.example.LLmColumnHandle;
 import io.trino.spi.Page;
 
 import java.io.InputStream;
@@ -9,7 +9,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public interface ReaderPlugin {
-    List<LLvmColumnHandle> getFields(String path, Function<String, InputStream> streamProvider);
+    List<LLmColumnHandle> getFields(String path, Function<String, InputStream> streamProvider);
 
     default Stream<List<?>> getRecordsIterator(String path, Function<String, InputStream> streamProvider)
     {
