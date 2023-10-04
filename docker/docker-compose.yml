@@ -7,11 +7,8 @@ services:
       - '8080:8080'
     volumes:
       - ./etc:/etc/trino
-      - /E/docker/trino-getting-started-main/hive/trino-hdfs3/data:/home/trino/data:ro
-      - /E/docker/trino-getting-started-main/hive/trino-hdfs3/plugin/llvm:/lib/trino/plugin/llm:ro
-      - /E/dockerVolume/hdfs:/home/dev/hdfs:ro
-      - /E/docker/code:/home/dev/code:ro
-      - /C/Users/luogo/Desktop/projects/ParserUtil:/home/dev/trino-gateway:ro
+      - ./data:/home/trino/data:ro
+      - ./plugin/llvm:/lib/trino/plugin/llm:ro
       - ./conf/core-site.xml:/etc/hadoop/conf/core-site.xml:ro
       - ./conf/hdfs-site.xml:/etc/hadoop/conf/hdfs-site.xml:ro
     networks:
