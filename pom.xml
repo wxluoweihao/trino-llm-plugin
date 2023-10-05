@@ -7,9 +7,14 @@
     <groupId>com.example</groupId>
     <artifactId>trino-llm</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>trino-plugin</packaging>
+    <packaging>pom</packaging>
+    <modules>
+        <module>trino-llm-test</module>
+        <module>trino-llm-udf</module>
+        <module>trino-llm-connector</module>
+    </modules>
 
-<!--    <parent>-->
+    <!--    <parent>-->
 <!--        <groupId>io.trino</groupId>-->
 <!--        <artifactId>trino-root</artifactId>-->
 <!--        <version>421-SNAPSHOT</version>-->
@@ -85,15 +90,12 @@
             <artifactId>trino-plugin-toolkit</artifactId>
             <version>${dep.trino.version}</version>
         </dependency>
-
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <version>${dep.jackson.version}</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>io.airlift</groupId>
             <artifactId>slice</artifactId>
@@ -114,42 +116,23 @@
             <version>${dep.opentelemetry.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- for testing -->
-        <dependency>
-            <groupId>io.trino</groupId>
-            <artifactId>trino-main</artifactId>
-            <scope>test</scope>
-            <version>${dep.trino.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>io.trino</groupId>
             <artifactId>trino-spi</artifactId>
             <version>${dep.trino.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>io.trino</groupId>
-            <artifactId>trino-testing</artifactId>
-            <scope>test</scope>
-            <version>${dep.trino.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.openjdk.jol</groupId>
             <artifactId>jol-core</artifactId>
             <version>0.17</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${dep.jackson.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.airlift</groupId>
             <artifactId>node</artifactId>
@@ -177,14 +160,6 @@
             <version>${dep.assertj-core.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${dep.testng.version}</version>
-            <scope>test</scope>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.theokanning.openai-gpt3-java/service -->
         <dependency>
             <groupId>com.theokanning.openai-gpt3-java</groupId>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>trino-llm</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>trino-llm-test</artifactId>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.targetJdk>17</project.build.targetJdk>
+        <dep.trino.version>427</dep.trino.version>
+        <dep.airlift.version>235</dep.airlift.version>
+        <dep.slice.version>2.2</dep.slice.version>
+        <dep.opentelemetry.version>1.30.1</dep.opentelemetry.version>
+        <dep.opentelemetry-instrumentation.version>1.30.0</dep.opentelemetry-instrumentation.version>
+        <dep.packaging.version>${dep.airlift.version}</dep.packaging.version>
+        <dep.aws-sdk.version>1.12.558</dep.aws-sdk.version>
+        <dep.guava.version>32.1.2-jre</dep.guava.version>
+        <dep.guice.version>7.0.0</dep.guice.version>
+        <dep.errorprone.version>2.22.0</dep.errorprone.version>
+        <dep.jackson.version>2.15.2</dep.jackson.version>
+        <dep.testcontainers.version>1.19.0</dep.testcontainers.version>
+        <dep.docker-java.version>3.3.3</dep.docker-java.version>
+        <dep.testng.version>7.8.0</dep.testng.version>
+        <dep.joda.version>2.12.5</dep.joda.version>
+        <dep.junit.version>5.10.0</dep.junit.version>
+        <dep.slf4j.version>2.0.9</dep.slf4j.version>
+        <dep.assertj-core.version>3.24.2</dep.assertj-core.version>
+        <dep.logback.version>1.4.11</dep.logback.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.trino</groupId>
+            <artifactId>trino-testing</artifactId>
+            <version>${dep.trino.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${dep.testng.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.trino</groupId>
+            <artifactId>trino-main</artifactId>
+            <version>${dep.trino.version}</version>
+        </dependency>
+    </dependencies>
+</project>

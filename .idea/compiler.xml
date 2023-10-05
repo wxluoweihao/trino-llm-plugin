@@ -6,7 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="trino-llm" />
+        <module name="trino-llm-udf" />
+        <module name="trino-llm-test" />
+        <module name="trino-llm-connector" />
       </profile>
     </annotationProcessing>
   </component>
