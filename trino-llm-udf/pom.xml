@@ -8,7 +8,7 @@
         <artifactId>trino-llm</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
+    <packaging>trino-plugin</packaging>
     <artifactId>trino-llm-udf</artifactId>
 
     <properties>
