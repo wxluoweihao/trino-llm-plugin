@@ -9,6 +9,7 @@ services:
       - ./etc:/etc/trino
       - ./data:/home/trino/data:ro
       - ./plugin/llm:/lib/trino/plugin/llm:ro
+      - ./plugin/llm-udf:/lib/trino/plugin/llm-udf:ro
       - ./conf/core-site.xml:/etc/hadoop/conf/core-site.xml:ro
       - ./conf/hdfs-site.xml:/etc/hadoop/conf/hdfs-site.xml:ro
     networks:
