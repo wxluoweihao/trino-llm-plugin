@@ -1,5 +1,4 @@
 .DS_Store
-docker/plugin
 target
 trino-llm-connector/target
 trino-llm-udf/target
